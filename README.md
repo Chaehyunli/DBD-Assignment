@@ -60,18 +60,20 @@ DBD-Assignment/
 cd backend
 ```
 
-`.env` 파일 내용:
+**중요**: 실제 데이터베이스 정보로 `.env` 파일을 생성하세요. 예시는 루트의 `.env.example` 파일을 참고하세요.
+
+`.env` 파일 예시 (실제 값으로 변경 필요):
 ```env
 # Database Configuration
-DATABASE_URL=postgresql://root:1234@localhost:5432/assignment_db
-POSTGRES_USER=root
-POSTGRES_PASSWORD=1234
-POSTGRES_DB=assignment_db
+DATABASE_URL=postgresql://YOUR_DB_USER:YOUR_DB_PASSWORD@localhost:5432/YOUR_DB_NAME
+POSTGRES_USER=YOUR_DB_USER
+POSTGRES_PASSWORD=YOUR_DB_PASSWORD
+POSTGRES_DB=YOUR_DB_NAME
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
 # Backend Configuration
-SECRET_KEY=dev-secret-key-change-in-production
+SECRET_KEY=your-secret-key-here-change-in-production
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
@@ -84,6 +86,10 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 # Server
 BACKEND_PORT=8000
 ```
+
+**보안 주의사항**:
+- `.env` 파일은 Git에 커밋하지 마세요 (이미 .gitignore에 포함됨)
+- 프로덕션 환경에서는 반드시 강력한 SECRET_KEY 사용
 
 ### 2. Backend 설정 및 실행
 
