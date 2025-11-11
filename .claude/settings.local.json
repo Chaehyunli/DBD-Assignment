@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(nul)",
+      "Bash(npm create:*)",
+      "Bash(tree:*)",
+      "Bash(python test_db_connection.py:*)",
+      "Bash(/c/Users/chaeh/AppData/Local/Microsoft/WindowsApps/python --version)",
+      "Bash(where:*)",
+      "Bash(py -m venv:*)",
+      "Bash(./venv/Scripts/pip.exe install:*)",
+      "Bash(./venv/Scripts/python.exe:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
