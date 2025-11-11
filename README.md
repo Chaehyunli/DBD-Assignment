@@ -87,7 +87,7 @@ BACKEND_PORT=8000
 
 ### 2. Backend 설정 및 실행
 
-#### 방법 1: Windows 배치 파일 사용 (추천)
+#### 방법 1: Windows 배치 파일 사용
 
 ```cmd
 cd backend
@@ -105,7 +105,7 @@ test_db.bat
 uvicorn app.main:app --reload --port 8000
 ```
 
-#### 방법 2: 수동 설치 (Windows)
+#### 방법 2: 수동 설치 (Windows) (추천)
 
 ```cmd
 cd backend
