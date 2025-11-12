@@ -2,6 +2,10 @@
 
 데이터베이스 설계 프로젝트
 
+## 변경사항
+- **2025-11-12**: 프론트엔드 제거, 백엔드 템플릿 기반 프로젝트로 전환
+- **2025-11-12**: 프로젝트 구조 단순화 - backend 폴더 제거하고 루트로 통합
+
 ## 기술 스택
 
 ### Backend
@@ -10,36 +14,35 @@
 - SQLAlchemy
 - Alembic
 - Python 3.10+
-
-### Frontend
-- React
-- Vite
+- Jinja2 (템플릿 엔진)
 
 ## 프로젝트 구조
 
 ```
 DBD-Assignment/
-├── backend/
-│   ├── app/
-│   │   ├── src/
-│   │   │   ├── core/            # 설정 및 보안
-│   │   │   ├── db/              # 데이터베이스 연결
-│   │   │   └── domain/          # 도메인별 모듈
-│   │   │       └── user/        # User 도메인 (예시)
-│   │   │           ├── controller.py   # API 엔드포인트
-│   │   │           ├── service.py      # 비즈니스 로직
-│   │   │           ├── repository.py   # 데이터베이스 작업
-│   │   │           ├── schema.py       # Pydantic 스키마
-│   │   │           └── model.py        # SQLAlchemy 모델
-│   │   └── main.py          # FastAPI 앱
-│   ├── alembic/             # 데이터베이스 마이그레이션
-│   ├── tests/               # 테스트
-│   ├── .env                 # 환경 변수 (gitignore)
-│   ├── requirements.txt     # Python 의존성
-│   ├── setup_env.bat        # Windows용 환경 설정 스크립트
-│   ├── test_db.bat          # Windows용 DB 연결 테스트
-│   └── test_db_connection.py  # DB 연결 테스트 스크립트
-└── frontend/                # React 프론트엔드
+├── app/
+│   ├── src/
+│   │   ├── core/            # 설정 및 보안
+│   │   ├── db/              # 데이터베이스 연결
+│   │   └── domain/          # 도메인별 모듈
+│   │       └── user/        # User 도메인 (예시)
+│   │           ├── controller.py   # API 엔드포인트
+│   │           ├── service.py      # 비즈니스 로직
+│   │           ├── repository.py   # 데이터베이스 작업
+│   │           ├── schema.py       # Pydantic 스키마
+│   │           └── model.py        # SQLAlchemy 모델
+│   ├── templates/           # Jinja2 템플릿
+│   └── main.py              # FastAPI 앱
+├── alembic/                 # 데이터베이스 마이그레이션
+├── tests/                   # 테스트
+├── .env                     # 환경 변수 (gitignore)
+├── .env.example             # 환경 변수 예시
+├── alembic.ini              # Alembic 설정
+├── requirements.txt         # Python 의존성
+├── setup_env.bat            # Windows용 환경 설정 스크립트
+├── test_db.bat              # Windows용 DB 연결 테스트
+├── test_db_connection.py    # DB 연결 테스트 스크립트
+└── README.md
 ```
 
 ## 설치 및 실행
@@ -48,17 +51,12 @@ DBD-Assignment/
 
 - Python 3.10 이상
 - PostgreSQL (별도 레포지토리에서 관리)
-- Node.js 18 이상 (Frontend)
 
 ### 1. 환경 변수 설정
 
 **데이터베이스는 별도 레포지토리에서 관리됩니다.**
 
-`backend/` 폴더에 `.env` 파일을 생성하고 데이터베이스 정보를 설정하세요:
-
-```bash
-cd backend
-```
+프로젝트 루트에 `.env` 파일을 생성하고 데이터베이스 정보를 설정하세요.
 
 **중요**: 실제 데이터베이스 정보로 `.env` 파일을 생성하세요. 예시는 루트의 `.env.example` 파일을 참고하세요.
 
@@ -91,13 +89,11 @@ BACKEND_PORT=8000
 - `.env` 파일은 Git에 커밋하지 마세요 (이미 .gitignore에 포함됨)
 - 프로덕션 환경에서는 반드시 강력한 SECRET_KEY 사용
 
-### 2. Backend 설정 및 실행
+### 2. 설정 및 실행
 
 #### 방법 1: Windows 배치 파일 사용
 
 ```cmd
-cd backend
-
 # 가상환경 생성 및 패키지 설치
 setup_env.bat
 
@@ -114,8 +110,6 @@ uvicorn app.main:app --reload --port 8000
 #### 방법 2: 수동 설치 (Windows) (추천)
 
 ```cmd
-cd backend
-
 # 가상환경 생성 (py 런처 사용)
 py -m venv venv
 
@@ -140,8 +134,6 @@ uvicorn app.main:app --reload --port 8000
 #### 방법 3: Mac/Linux
 
 ```bash
-cd backend
-
 # 가상환경 생성
 python3 -m venv venv
 
@@ -166,27 +158,11 @@ uvicorn app.main:app --reload --port 8000
 - API 문서 (ReDoc): http://localhost:8000/redoc
 - Health Check: http://localhost:8000/health
 
-### 3. Frontend 설정 및 실행
-
-```bash
-# 프론트엔드 디렉토리로 이동
-cd frontend
-
-# 의존성 설치
-npm install
-
-# 개발 서버 실행
-npm run dev
-```
-
-Frontend: http://localhost:5173
-
 ## 데이터베이스 연결 테스트
 
 데이터베이스가 정상적으로 연결되는지 확인:
 
 ```bash
-cd backend
 python test_db_connection.py
 ```
 
@@ -201,7 +177,6 @@ python test_db_connection.py
 
 ### 새로운 마이그레이션 생성
 ```bash
-cd backend
 alembic revision --autogenerate -m "마이그레이션 메시지"
 ```
 
@@ -248,7 +223,6 @@ alembic current
 ## 테스트
 
 ```bash
-cd backend
 pytest
 ```
 
@@ -309,11 +283,12 @@ mypy app/
 
 ## 주요 파일 및 경로
 
-- **Backend 설정**: `backend/.env`
-- **Database 설정**: `backend/app/src/core/config.py`
-- **Database 연결**: `backend/app/src/db/base.py`
-- **도메인 모듈**: `backend/app/src/domain/`
-- **마이그레이션**: `backend/alembic/versions/`
+- **환경 변수**: `.env`
+- **Database 설정**: `app/src/core/config.py`
+- **Database 연결**: `app/src/db/base.py`
+- **도메인 모듈**: `app/src/domain/`
+- **템플릿**: `app/templates/`
+- **마이그레이션**: `alembic/versions/`
 
 ## 라이선스
 

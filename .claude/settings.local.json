@@ -12,7 +12,8 @@
       "Bash(./venv/Scripts/pip.exe install:*)",
       "Bash(./venv/Scripts/python.exe:*)",
       "Bash(test -f:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

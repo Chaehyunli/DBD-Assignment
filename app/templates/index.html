@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학사 관리 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-box h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .data-display {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 학사 관리 시스템</h1>
+        <p class="subtitle">FastAPI + Jinja2 서버 사이드 렌더링</p>
+
+        <div class="info-box">
+            <h2>시스템 정보</h2>
+            <p>이 페이지는 React 없이 <strong>FastAPI</strong>와 <strong>Jinja2</strong> 템플릿 엔진으로 직접 렌더링되었습니다.</p>
+            <span class="status-badge">✓ 정상 작동 중</span>
+        </div>
+
+        <div class="info-box">
+            <h2>백엔드 데이터</h2>
+            <p>서버에서 전달된 데이터:</p>
+            <div class="data-display">
+                {{ data_from_backend }}
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>DBD Assignment Project | FastAPI Server Side Template</p>
+            <p>별도의 프론트엔드 서버 없이 단일 서버에서 실행됩니다.</p>
+        </div>
+    </div>
+</body>
+</html>
