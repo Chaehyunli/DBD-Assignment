@@ -17,10 +17,14 @@ depends_on = None
 
 
 def upgrade() -> None:
+    # Create sequence for lecture_id
+    op.execute("CREATE SEQUENCE lecture_lecture_id_seq")
+
     # Create lecture table
     op.create_table(
         'lecture',
-        sa.Column('lecture_id', sa.Integer, sa.Sequence('lecture_lecture_id_seq'), primary_key=True, autoincrement=True),
+        sa.Column('lecture_id', sa.Integer, primary_key=True, nullable=False,
+                  server_default=sa.text("nextval('lecture_lecture_id_seq')")),
         sa.Column('semester', sa.String(6), nullable=False),
         sa.Column('lecture_time', sa.String(50)),
         sa.Column('lecture_room', sa.String(50)),
@@ -32,7 +36,10 @@ def upgrade() -> None:
         sa.CheckConstraint('capacity BETWEEN 1 AND 999', name='lecture_capacity_check')
     )
 
+    # Set sequence ownership to the column
+    op.execute("ALTER SEQUENCE lecture_lecture_id_seq OWNED BY lecture.lecture_id")
+
 
 def downgrade() -> None:
-    # Drop lecture table
+    # Drop lecture table (sequence will be dropped automatically due to OWNED BY)
     op.drop_table('lecture')
