@@ -187,7 +187,7 @@ alembic upgrade head
 
 ### 마이그레이션 롤백
 ```bash
-alembic downgrade -1
+alembic downgrade base
 ```
 
 ### 현재 마이그레이션 상태 확인
