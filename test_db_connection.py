@@ -32,7 +32,10 @@ def test_database_connection():
         print("\n[연결 테스트 1: Engine]")
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version();"))
-            version = result.fetchone()[0]
+            row = result.fetchone()
+            if row is None:
+                raise Exception("쿼리 결과가 없습니다")
+            version = row[0]
             print(f"✓ 연결 성공!")
             print(f"PostgreSQL 버전: {version}")
 
@@ -41,7 +44,10 @@ def test_database_connection():
         db = SessionLocal()
         try:
             result = db.execute(text("SELECT current_database(), current_user;"))
-            db_name, user = result.fetchone()
+            row = result.fetchone()
+            if row is None:
+                raise Exception("쿼리 결과가 없습니다")
+            db_name, user = row
             print(f"✓ 세션 연결 성공!")
             print(f"현재 데이터베이스: {db_name}")
             print(f"현재 사용자: {user}")
