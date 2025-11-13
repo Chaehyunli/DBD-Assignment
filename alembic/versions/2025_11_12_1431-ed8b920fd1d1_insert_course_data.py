@@ -29,7 +29,18 @@ def upgrade() -> None:
         ('EE201', '전자기학', 1)
     """)
 
+    # Insert additional course data (5 records)
+    op.execute("""
+        INSERT INTO course (course_code, course_name, credits)
+        VALUES
+        ('BUS101', '경영학원론', 3),
+        ('BUS102', '마케팅', 3),
+        ('BUS201', '회계원리', 3),
+        ('DES101', '기초디자인', 3),
+        ('DES102', '색채학', 2)
+    """)
+
 
 def downgrade() -> None:
     # Delete course data
-    op.execute("DELETE FROM course WHERE course_code IN ('CS101', 'CS201', 'ME101', 'ME201', 'EE101', 'EE201')")
+    op.execute("DELETE FROM course WHERE course_code IN ('CS101', 'CS201', 'ME101', 'ME201', 'EE101', 'EE201', 'BUS101', 'BUS102', 'BUS201', 'DES101', 'DES102')")

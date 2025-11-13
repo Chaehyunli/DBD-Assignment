@@ -33,7 +33,16 @@ def upgrade() -> None:
         ('S1000010', '한지아', 3, '재학', 2.46, 'EE')
     """)
 
+    # Insert additional student data (3 records)
+    op.execute("""
+        INSERT INTO student (student_id, student_name, grade_year, enrollment_status, overall_gpa, dept_code)
+        VALUES
+        ('S2001', '박지훈', 1, '재학', 4.25, 'BUS'),
+        ('S2002', '이서연', 2, '재학', 3.75, 'BUS'),
+        ('S3001', '정예슬', 1, '재학', 4.20, 'DES')
+    """)
+
 
 def downgrade() -> None:
     # Delete student data
-    op.execute("DELETE FROM student WHERE student_id LIKE 'S10000%'")
+    op.execute("DELETE FROM student WHERE student_id LIKE 'S10000%' OR student_id IN ('S2001', 'S2002', 'S3001')")

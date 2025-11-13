@@ -26,7 +26,15 @@ def upgrade() -> None:
         ('EE', '전자공학과', '공학관 301호', '02-333-3333')
     """)
 
+    # Insert additional department data (2 records)
+    op.execute("""
+        INSERT INTO department (dept_code, dept_name, office_location, office_phone_number)
+        VALUES
+        ('BUS', '경영학과', '경영관 201호', '031-123-5001'),
+        ('DES', '디자인학과', '조형관 110호', '031-123-6001')
+    """)
+
 
 def downgrade() -> None:
     # Delete department data
-    op.execute("DELETE FROM department WHERE dept_code IN ('CS', 'ME', 'EE')")
+    op.execute("DELETE FROM department WHERE dept_code IN ('CS', 'ME', 'EE', 'BUS', 'DES')")

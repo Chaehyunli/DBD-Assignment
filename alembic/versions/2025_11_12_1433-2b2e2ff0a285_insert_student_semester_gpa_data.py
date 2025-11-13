@@ -43,7 +43,16 @@ def upgrade() -> None:
         ('S1000010', '2025-2', 2.71, 7)
     """)
 
+    # Insert additional student_semester_gpa data (3 records)
+    op.execute("""
+        INSERT INTO student_semester_gpa (student_id, semester, semester_gpa, earned_credits)
+        VALUES
+        ('S2001', '2025-2', 4.25, 6),
+        ('S2002', '2025-2', 3.75, 6),
+        ('S3001', '2025-2', 4.20, 5)
+    """)
+
 
 def downgrade() -> None:
     # Delete student_semester_gpa data
-    op.execute("DELETE FROM student_semester_gpa WHERE student_id LIKE 'S10000%'")
+    op.execute("DELETE FROM student_semester_gpa WHERE student_id LIKE 'S10000%' OR student_id IN ('S2001', 'S2002', 'S3001')")

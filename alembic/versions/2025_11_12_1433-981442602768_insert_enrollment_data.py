@@ -54,7 +54,24 @@ def upgrade() -> None:
         ('S1000010', 11, 'B0'), ('S1000010', 12, 'C+'), ('S1000010', 7, 'C+')
     """)
 
+    # Insert additional enrollment data for new students
+    # Note: lecture_id values need to be determined based on the actual lecture table
+    # Using placeholder values - should be updated with actual lecture_ids
+    op.execute("""
+        INSERT INTO enrollment (student_id, lecture_id, grade)
+        VALUES
+        -- 박지훈 (S2001): 2과목 수강
+        ('S2001', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS101' AND semester = '2025-2' AND professor_id = 'P4001'), 'A+'),
+        ('S2001', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS102' AND semester = '2025-2' AND professor_id = 'P4002'), 'A0'),
+        -- 이서연 (S2002): 2과목 수강
+        ('S2002', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS101' AND semester = '2025-2' AND professor_id = 'P4001'), 'B+'),
+        ('S2002', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS201' AND semester = '2025-2' AND professor_id = 'P4001'), 'A0'),
+        -- 정예슬 (S3001): 2과목 수강
+        ('S3001', (SELECT lecture_id FROM lecture WHERE course_code = 'DES101' AND semester = '2025-2' AND professor_id = 'P5001'), 'A0'),
+        ('S3001', (SELECT lecture_id FROM lecture WHERE course_code = 'DES102' AND semester = '2025-2' AND professor_id = 'P5001'), 'A+')
+    """)
+
 
 def downgrade() -> None:
     # Delete enrollment data
-    op.execute("DELETE FROM enrollment WHERE student_id LIKE 'S10000%'")
+    op.execute("DELETE FROM enrollment WHERE student_id LIKE 'S10000%' OR student_id IN ('S2001', 'S2002', 'S3001')")

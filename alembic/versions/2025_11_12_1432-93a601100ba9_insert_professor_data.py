@@ -28,7 +28,16 @@ def upgrade() -> None:
         ('P0005', '정다빈', '공학관 303호', 'jung@univ.ac.kr', 'EE')
     """)
 
+    # Insert additional professor data (3 records)
+    op.execute("""
+        INSERT INTO professor (professor_id, professor_name, office_room, email, dept_code)
+        VALUES
+        ('P4001', '김영민', '경영관 501호', 'ymkim@mju.ac.kr', 'BUS'),
+        ('P4002', '이하나', '경영관 502호', 'hnlee@mju.ac.kr', 'BUS'),
+        ('P5001', '최미소', '조형관 302호', 'mschoi@mju.ac.kr', 'DES')
+    """)
+
 
 def downgrade() -> None:
     # Delete professor data
-    op.execute("DELETE FROM professor WHERE professor_id IN ('P0001', 'P0002', 'P0003', 'P0004', 'P0005')")
+    op.execute("DELETE FROM professor WHERE professor_id IN ('P0001', 'P0002', 'P0003', 'P0004', 'P0005', 'P4001', 'P4002', 'P5001')")

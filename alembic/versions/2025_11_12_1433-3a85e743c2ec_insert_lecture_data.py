@@ -41,6 +41,17 @@ def upgrade() -> None:
         ('2025-2', '수 7-8, 금 2', '공학관 311호', 100, 'EE201', 'P0005')
     """)
 
+    # Insert additional lecture data for 2025-2 semester (5 records)
+    op.execute("""
+        INSERT INTO lecture (semester, lecture_time, lecture_room, capacity, course_code, professor_id)
+        VALUES
+        ('2025-2', '월3,4', '경영관 303호', 50, 'BUS101', 'P4001'),
+        ('2025-2', '화1,2', '경영관 304호', 50, 'BUS102', 'P4002'),
+        ('2025-2', '수5,6', '경영관 303호', 40, 'BUS201', 'P4001'),
+        ('2025-2', '화1,2,3', '조형관 105호', 30, 'DES101', 'P5001'),
+        ('2025-2', '목1,2', '조형관 202호', 30, 'DES102', 'P5001')
+    """)
+
 
 def downgrade() -> None:
     # Delete lecture data
