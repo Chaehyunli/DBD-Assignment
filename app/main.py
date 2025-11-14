@@ -6,6 +6,7 @@ from pathlib import Path
 from app.src.core.config import settings
 from app.src.domain.course.controller import router as courses_router
 from app.src.domain.lecture.controller import router as lecture_router
+from app.src.domain.scholarship.controller import router as scholarship_router
 
 # Jinja2 템플릿 설정
 BASE_DIR = Path(__file__).resolve().parent
@@ -29,6 +30,7 @@ app.add_middleware(
 # 예시: app.include_router(router, prefix=f"{settings.API_V1_STR}/endpoint", tags=["tag"])
 app.include_router(courses_router, prefix=f"{settings.API_V1_STR}/courses", tags=["courses"])
 app.include_router(lecture_router) # lecture 라우터 포함
+app.include_router(scholarship_router, prefix=f"{settings.API_V1_STR}/scholarship", tags=["scholarship"])
 
 
 @app.get("/", response_class=HTMLResponse)

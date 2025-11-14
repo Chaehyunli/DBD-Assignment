@@ -12,4 +12,4 @@ class Enrollment(Base):
 
     # Relationships
     student = relationship("Student", back_populates="enrollments")
-    lecture = relationship("Lecture", back_populates="enrollments")
+    # lecture = relationship("Lecture", back_populates="enrollments")
