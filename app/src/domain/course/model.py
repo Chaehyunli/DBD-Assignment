@@ -14,4 +14,5 @@ class Course(Base):
     credits = Column(Numeric(1, 0), nullable=False)
 
     # Relationships
+
     lectures = relationship("Lecture", back_populates="course")
