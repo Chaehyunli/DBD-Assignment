@@ -302,11 +302,9 @@
     </div>
 
     <script>
-        // TODO: 실제 백엔드 API가 준비되면, 이 파일 전체의 'mockApi' 호출을 'fetch'로 변경해야 합니다.
-        //       (e.g., `const res = await mockApi(...)` -> `const res = await fetch(...)`)
         // ==================================================================
         // Mock API (가짜 API 서버)
-        // 서버가 없어도 API 명세서대로 응답을 시뮬레이션합니다.
+        // 테스트용으로만 사용되며, 실제 API는 fetch()를 통해 호출됩니다.
         // ==================================================================
         const mockApi = (endpoint, options = {}) => {
             console.log("Mock API Call:", endpoint, options);
@@ -583,12 +581,17 @@
                 const grade = document.getElementById('grade-new-grade').value;
 
                 try {
-                    const res = await mockApi(`/api/v1/students/${studentId}/lectures/${lectureId}/grade`, {
+                    const res = await fetch(`/api/v1/students/${studentId}/lectures/${lectureId}/grade`, {
                         method: 'PATCH',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ "grade": grade })
                     });
                     const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.detail || '성적 수정에 실패했습니다.');
+                    }
+
                     showResult('result-update-grade', 'API 응답 (트리거 작동)', data);
                 } catch (err) {
                     showResult('result-update-grade', '오류 발생', { error: err.message });
@@ -609,17 +612,17 @@
                             e.preventDefault();
                             const courseCode = document.getElementById('info-course-code').value;
                             if (!courseCode) { alert('과목코드를 입력하세요.'); return; }
-            
+
                             try {
-                                const res = await mockApi(`/api/v1/courses/${courseCode}/professors`);
+                                const res = await fetch(`/api/v1/courses/${courseCode}/professors`);
                                 const data = await res.json();
-            
+
                                 if (!res.ok) {
                                     throw new Error(data.detail || '담당 교수 조회에 실패했습니다.');
                                 }
-            
+
                                 resultInfoTitle.textContent = `[${courseCode}] 담당 교수 조회 결과`;
-                                
+
                                 if (data.length === 0) {
                                     resultInfoContent.innerHTML = '<p class="p-4 text-center text-gray-500">해당 과목을 담당하는 교수가 없습니다.</p>';
                                 } else {
@@ -647,7 +650,7 @@
                                     `;
                                 }
                                 resultInfoArea.classList.remove('hidden');
-            
+
                             } catch (err) {
                                 resultInfoTitle.textContent = '오류 발생';
                                 resultInfoContent.innerHTML = `<p class="p-4 text-red-500">${err.message}</p>`;
@@ -704,8 +707,12 @@
                 params.append('status', document.getElementById('scholar-status').value);
 
                 try {
-                    const res = await mockApi(`/api/v1/scholarship/candidates?${params.toString()}`);
+                    const res = await fetch(`/api/v1/scholarship/candidates?${params.toString()}`);
                     const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.detail || '장학생 후보자 조회에 실패했습니다.');
+                    }
 
                     tableScholarship.innerHTML = ''; // 테이블 초기화
                     if (data.length === 0) {
@@ -792,12 +799,16 @@
             button.disabled = true;
 
             try {
-                const res = await mockApi(`/api/v1/students/${studentId}/lectures/${lectureId}/grade`, {
+                const res = await fetch(`/api/v1/students/${studentId}/lectures/${lectureId}/grade`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ "grade": newGrade })
                 });
                 const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.detail || '성적 수정에 실패했습니다.');
+                }
 
                 input.value = data.updated_grade;
                 button.textContent = '성공';
@@ -826,8 +837,12 @@
             showModal('modal-report');
 
             try {
-                const res = await mockApi(`/api/v1/students/${studentId}/report`);
+                const res = await fetch(`/api/v1/students/${studentId}/report`);
                 const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.detail || '성적표 조회에 실패했습니다.');
+                }
 
                 let html = `
             <div class="mb-4">
