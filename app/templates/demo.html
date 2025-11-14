@@ -83,7 +83,7 @@
                     data-tab="tab-grade">성적 관리</button>
                 <button
                     class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:outline-none"
-                    data-tab="tab-course">과목 정보</button>
+                    data-tab="tab-course">과목 및 강의 정보</button>
                 <button
                     class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:outline-none"
                     data-tab="tab-scholarship">장학생 선별</button>
@@ -104,7 +104,7 @@
                     <form id="form-create-lecture" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <input type="text" id="lecture-semester" placeholder="학기 (예: 2026-1)" class="p-2 border rounded"
                             required>
-                        <input type="text" id="lecture-time" placeholder="강의 시간 (예: 월3,4)" class="p-2 border rounded"
+                        <input type="text" id="lecture-time" placeholder="강의 시간 (예: 월3-4)" class="p-2 border rounded"
                             required>
                         <input type="text" id="lecture-room" placeholder="강의실 (예: 공학관 501호)" class="p-2 border rounded"
                             required>
@@ -182,23 +182,36 @@
             <!-- 3. 과목 정보 탭 (시연 3, 4) -->
             <!-- ======================= -->
             <div id="tab-course" class="tab-content space-y-6">
-                <h2 class="text-2xl font-semibold text-gray-700">과목 정보 조회 (시연 3, 4)</h2>
+                <h2 class="text-2xl font-semibold text-gray-700">과목 및 강의 정보 조회</h2>
+
+                <!-- 담당 교수 조회 -->
                 <div class="p-5 bg-gray-50 rounded-lg border">
-                    <h3 class="font-semibold text-lg mb-4">과목 코드로 조회</h3>
-                    <form id="form-course-info" class="flex space-x-4 mb-4">
+                    <h3 class="font-semibold text-lg mb-4">담당 교수 조회 (과목 코드로)</h3>
+                    <form id="form-get-professors" class="flex space-x-4 mb-4">
                         <input type="text" id="info-course-code" placeholder="과목코드 (예: CS101)"
                             class="flex-grow p-2 border rounded" required>
-                        <button type="button" id="btn-get-professors"
+                        <button type="submit"
                             class="p-2 bg-cyan-600 text-white rounded font-semibold hover:bg-cyan-700 transition">담당 교수
                             조회</button>
-                        <button type="button" id="btn-get-course-lectures"
-                            class="p-2 bg-teal-600 text-white rounded font-semibold hover:bg-teal-700 transition">개설 강의
+                    </form>
+                </div>
+
+                <!-- 강의 상세 조회 -->
+                <div class="p-5 bg-gray-50 rounded-lg border">
+                    <h3 class="font-semibold text-lg mb-4">강의 상세 정보 조회 (강의 ID로)</h3>
+                    <form id="form-get-lecture-details" class="flex space-x-4 mb-4">
+                        <input type="number" id="info-lecture-id" placeholder="강의 ID (예: 101)"
+                            class="flex-grow p-2 border rounded" required>
+                        <button type="submit"
+                            class="p-2 bg-teal-600 text-white rounded font-semibold hover:bg-teal-700 transition">강의 정보
                             조회</button>
                     </form>
-                    <div id="result-course-info" class="mt-4 p-3 bg-cyan-50 rounded hidden">
-                        <h4 id="result-course-info-title" class="font-semibold text-cyan-800">조회 결과</h4>
-                        <div id="result-course-info-content" class="text-sm bg-white p-2 rounded overflow-auto"></div>
-                    </div>
+                </div>
+
+                <!-- 조회 결과 표시 영역 -->
+                <div id="result-info-area" class="mt-4 p-3 bg-blue-50 rounded hidden">
+                    <h4 id="result-info-title" class="font-semibold text-blue-800">조회 결과</h4>
+                    <div id="result-info-content" class="text-sm bg-white p-2 rounded overflow-auto"></div>
                 </div>
             </div>
 
@@ -323,7 +336,7 @@
                         if (endpoint.match(/\/api\/v1\/lectures\/(\d+)$/)) {
                             resolve({
                                 ok: true, status: 200, json: () => Promise.resolve({
-                                    "lecture_id": 101, "semester": "2025-2", "lecture_time": "월3,4",
+                                    "lecture_id": 101, "semester": "2025-2", "lecture_time": "월3-4",
                                     "lecture_room": "경영관 303호", "capacity": 50, "course_code": "BUS101",
                                     "professor_id": "P4001"
                                 })
@@ -489,14 +502,18 @@
                 };
 
                 try {
-                    const res = await mockApi('/api/v1/lectures', {
+                    const res = await fetch('/api/v1/lectures', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data)
                     });
                     const result = await res.json();
 
-                    resultCreateLecture.textContent = result.message;
+                    if (!res.ok) {
+                        throw new Error(result.detail || '강의 개설에 실패했습니다.');
+                    }
+
+                    resultCreateLecture.textContent = `강의 ID ${result.lecture_id}가 성공적으로 개설되었습니다.`;
                     resultCreateLecture.classList.remove('hidden');
                     formCreateLecture.reset();
                 } catch (err) {
@@ -520,8 +537,12 @@
                 if (prof_id) params.append('professor_id', prof_id);
 
                 try {
-                    const res = await mockApi(`/api/v1/lectures?${params.toString()}`);
+                    const res = await fetch(`/api/v1/lectures?${params.toString()}`);
                     const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.detail || '강의 조회에 실패했습니다.');
+                    }
 
                     tableLectures.innerHTML = ''; // 테이블 초기화
                     if (data.length === 0) {
@@ -575,88 +596,100 @@
             });
 
             // -----------------------
-            // 3. 과목 정보 탭 (시연 3, 4)
+            // 3. 과목 정보 탭
             // -----------------------
-            const courseCodeInput = document.getElementById('info-course-code');
-            const resultCourseInfo = document.getElementById('result-course-info');
+            const formGetProfessors = document.getElementById('form-get-professors');
+            const formGetLectureDetails = document.getElementById('form-get-lecture-details');
+            const resultInfoArea = document.getElementById('result-info-area');
+            const resultInfoTitle = document.getElementById('result-info-title');
+            const resultInfoContent = document.getElementById('result-info-content');
 
-            document.getElementById('btn-get-professors').addEventListener('click', async () => {
-                const courseCode = courseCodeInput.value;
-                if (!courseCode) { alert('과목코드를 입력하세요.'); return; }
-
-                const titleEl = document.getElementById('result-course-info-title');
-                const contentEl = document.getElementById('result-course-info-content');
-
-                try {
-                    const res = await mockApi(`/api/v1/courses/${courseCode}/professors`);
-                    const data = await res.json();
-
-                    titleEl.textContent = `[${courseCode}] 담당 교수 조회 결과`;
-                    contentEl.innerHTML = `<pre class="text-sm text-cyan-900 bg-white p-2 rounded overflow-auto">${JSON.stringify(data, null, 2)}</pre>`;
-                    resultCourseInfo.classList.remove('hidden');
-
-                } catch (err) {
-                    titleEl.textContent = '오류 발생';
-                    contentEl.innerHTML = `<pre class="text-sm text-red-700 bg-red-50 p-2 rounded overflow-auto">${JSON.stringify({ error: err.message }, null, 2)}</pre>`;
-                    resultCourseInfo.classList.remove('hidden');
-                }
-            });
-
-            document.getElementById('btn-get-course-lectures').addEventListener('click', async () => {
-                const courseCode = courseCodeInput.value;
-                if (!courseCode) { alert('과목코드를 입력하세요.'); return; }
-
-                const resultEl = document.getElementById('result-course-info');
-                const titleEl = document.getElementById('result-course-info-title');
-                const contentEl = document.getElementById('result-course-info-content');
-
-                try {
-                    const params = new URLSearchParams({ course_code: courseCode });
-                    const res = await mockApi(`/api/v1/lectures?${params.toString()}`);
-                    const data = await res.json();
-
-                    titleEl.textContent = `[${courseCode}] 개설 강의 목록`;
-
-                    if (data.length === 0) {
-                        contentEl.innerHTML = '<p class="p-4 text-center text-gray-500">개설된 강의가 없습니다.</p>';
-                    } else {
-                        contentEl.innerHTML = `
-                            <table class="min-w-full text-sm">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="p-2 text-left">강의ID</th>
-                                        <th class="p-2 text-left">학기</th>
-                                        <th class="p-2 text-left">교수ID</th>
-                                        <th class="p-2 text-left">강의실</th>
-                                        <th class="p-2 text-left"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${data.map(lecture => `
-                                        <tr class="border-t">
-                                            <td class="p-2">${lecture.lecture_id}</td>
-                                            <td class="p-2">${lecture.semester}</td>
-                                            <td class="p-2">${lecture.professor_id}</td>
-                                            <td class="p-2">${lecture.lecture_room}</td>
-                                            <td class="p-2 text-right">
-                                                <button class="text-sm bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                                                        onclick="viewStudents('${lecture.lecture_id}')">수강생 보기</button>
-                                            </td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        `;
-                    }
-                    resultEl.classList.remove('hidden');
-
-                } catch (err) {
-                    titleEl.textContent = '오류 발생';
-                    contentEl.innerHTML = `<p class="p-4 text-red-500">${err.message}</p>`;
-                    resultEl.classList.remove('hidden');
-                }
-            });
-
+                        // 담당 교수 조회
+                        formGetProfessors.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const courseCode = document.getElementById('info-course-code').value;
+                            if (!courseCode) { alert('과목코드를 입력하세요.'); return; }
+            
+                            try {
+                                const res = await mockApi(`/api/v1/courses/${courseCode}/professors`);
+                                const data = await res.json();
+            
+                                if (!res.ok) {
+                                    throw new Error(data.detail || '담당 교수 조회에 실패했습니다.');
+                                }
+            
+                                resultInfoTitle.textContent = `[${courseCode}] 담당 교수 조회 결과`;
+                                
+                                if (data.length === 0) {
+                                    resultInfoContent.innerHTML = '<p class="p-4 text-center text-gray-500">해당 과목을 담당하는 교수가 없습니다.</p>';
+                                } else {
+                                    resultInfoContent.innerHTML = `
+                                        <table class="min-w-full text-sm">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="p-2 text-left">교수 ID</th>
+                                                    <th class="p-2 text-left">이름</th>
+                                                    <th class="p-2 text-left">이메일</th>
+                                                    <th class="p-2 text-left">연구실</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${data.map(prof => `
+                                                    <tr class="border-t">
+                                                        <td class="p-2">${prof.professor_id}</td>
+                                                        <td class="p-2">${prof.professor_name}</td>
+                                                        <td class="p-2">${prof.email}</td>
+                                                        <td class="p-2">${prof.office_room}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    `;
+                                }
+                                resultInfoArea.classList.remove('hidden');
+            
+                            } catch (err) {
+                                resultInfoTitle.textContent = '오류 발생';
+                                resultInfoContent.innerHTML = `<p class="p-4 text-red-500">${err.message}</p>`;
+                                resultInfoArea.classList.remove('hidden');
+                            }
+                        });
+                        // 강의 상세 정보 조회
+                        formGetLectureDetails.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const lectureId = document.getElementById('info-lecture-id').value;
+                            if (!lectureId) { alert('강의 ID를 입력하세요.'); return; }
+            
+                            try {
+                                const res = await fetch(`/api/v1/lectures/${lectureId}`);
+                                const data = await res.json();
+            
+                                 if (!res.ok) {
+                                    throw new Error(data.detail || '강의 정보 조회에 실패했습니다.');
+                                }
+            
+                                resultInfoTitle.textContent = `[강의 ID: ${lectureId}] 상세 정보`;
+                                resultInfoContent.innerHTML = `
+                                    <table class="min-w-full text-sm">
+                                        <tbody class="bg-white">
+                                            <tr><td class="p-2 font-semibold border-t">강의 ID</td><td class="p-2 border-t">${data.lecture_id}</td></tr>
+                                            <tr><td class="p-2 font-semibold border-t">학기</td><td class="p-2 border-t">${data.semester}</td></tr>
+                                            <tr><td class="p-2 font-semibold border-t">강의 시간</td><td class="p-2 border-t">${data.lecture_time}</td></tr>
+                                            <tr><td class="p-2 font-semibold border-t">강의실</td><td class="p-2 border-t">${data.lecture_room}</td></tr>
+                                            <tr><td class="p-2 font-semibold border-t">수강 정원</td><td class="p-2 border-t">${data.capacity}</td></tr>
+                                            <tr><td class="p-2 font-semibold border-t">과목 코드</td><td class="p-2 border-t">${data.course_code}</td></tr>
+                                            <tr><td class="p-2 font-semibold border-t">교수 ID</td><td class="p-2 border-t">${data.professor_id}</td></tr>
+                                        </tbody>
+                                    </table>
+                                `;
+                                resultInfoArea.classList.remove('hidden');
+            
+                            } catch (err) {
+                                resultInfoTitle.textContent = '오류 발생';
+                                resultInfoContent.innerHTML = `<p class="p-4 text-red-500">${err.message}</p>`;
+                                resultInfoArea.classList.remove('hidden');
+            }
+                        });
             // -----------------------
             // 4. 장학생 선별 탭 (시연 5)
             // -----------------------
@@ -708,8 +741,12 @@
             showModal('modal-students');
 
             try {
-                const res = await mockApi(`/api/v1/lectures/${lectureId}/students`);
+                const res = await fetch(`/api/v1/lectures/${lectureId}/students`);
                 const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.detail || '수강생 조회에 실패했습니다.');
+                }
 
                 tableBody.innerHTML = '';
                 if (data.length === 0) {

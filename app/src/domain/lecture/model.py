@@ -1,12 +1,12 @@
 from sqlalchemy import Column, String, Integer, Numeric, CHAR, ForeignKey
 from sqlalchemy.orm import relationship
 from app.src.db.base import Base
-from app.src.domain.course.model import Course
-from app.src.domain.professor.model import Professor
-from app.src.domain.enrollment.model import Enrollment
 
 
 class Lecture(Base):
+    """
+    Lecture 모델
+    """
     __tablename__ = "lecture"
 
     lecture_id = Column(Integer, primary_key=True, index=True)
@@ -20,4 +20,4 @@ class Lecture(Base):
     # Relationships
     course = relationship("Course", back_populates="lectures")
     professor = relationship("Professor", back_populates="lectures")
-    enrollments = relationship("Enrollment", back_populates="lecture")
+    # enrollments = relationship("Enrollment", back_populates="lecture")

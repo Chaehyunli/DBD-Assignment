@@ -17,4 +17,4 @@ class Professor(Base):
 
     # Relationship to Lecture (one-to-many)
     lectures = relationship("Lecture", back_populates="professor")
-    department = relationship("Department", backref="professors")
+    # department = relationship("Department", backref="professors")
