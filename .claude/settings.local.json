@@ -13,7 +13,9 @@
       "Bash(./venv/Scripts/python.exe:*)",
       "Bash(test -f:*)",
       "Bash(cat:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(mkdir:*)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []

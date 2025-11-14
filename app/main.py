@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 from app.src.core.config import settings
+from app.src.domain.course.controller import router as courses_router
 
 # Jinja2 템플릿 설정
 BASE_DIR = Path(__file__).resolve().parent
@@ -25,6 +26,7 @@ app.add_middleware(
 
 # API 라우터 등록
 # 예시: app.include_router(router, prefix=f"{settings.API_V1_STR}/endpoint", tags=["tag"])
+app.include_router(courses_router, prefix=f"{settings.API_V1_STR}/courses", tags=["courses"])
 
 
 @app.get("/", response_class=HTMLResponse)
