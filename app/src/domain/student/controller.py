@@ -31,7 +31,7 @@ async def update_student_grade(
 
     - **student_id**: 학번 (예: S1000001)
     - **lecture_id**: 강의 ID (예: 1)
-    - **grade**: 성적 (A+, A, B+, B, C+, C, D+, D, F)
+    - **grade**: 성적 (A+, A0, B+, B0, C+, C0, D+, D0, F)
     - **Returns**: 갱신된 성적 및 평점 정보
     - **Error**: 404 - 학생 또는 수강 내역이 존재하지 않음
     """

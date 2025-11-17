@@ -22,7 +22,7 @@ GRADE_TO_POINT = {
 }
 
 # 유효한 성적 목록 (API 입력용)
-VALID_GRADES = ["A+", "A", "B+", "B", "C+", "C", "D+", "D", "F"]
+VALID_GRADES = ["A+", "A0", "B+", "B0", "C+", "C0", "D+", "D0", "F"]
 
 
 def grade_to_point(grade: Optional[str]) -> float:
@@ -30,7 +30,7 @@ def grade_to_point(grade: Optional[str]) -> float:
     성적을 평점으로 변환
 
     Args:
-        grade: 성적 (A+, A, B+, B, C+, C, D+, D, F)
+        grade: 성적 (A+, A0, B+, B0, C+, C0, D+, D0, F)
 
     Returns:
         평점 (0.0 ~ 4.5)

@@ -7,7 +7,7 @@ class GradeUpdateRequest(BaseModel):
     """
     성적 수정 요청 스키마
     """
-    grade: str = Field(..., max_length=2, description="성적 (A+, A, B+, B, C+, C, D+, D, F)")
+    grade: str = Field(..., max_length=2, description="성적 (A+, A0, B+, B0, C+, C0, D+, D0, F)")
 
     @field_validator('grade')
     @classmethod
