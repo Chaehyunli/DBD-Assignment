@@ -5,6 +5,8 @@ from alembic import context
 import os
 import sys
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -21,7 +23,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from app.src.db.base import Base
 
 # Import all domain models here for Alembic to detect
-from app.src.domain.user.model import User  # noqa
+from app.src.domain.student.model import Student  # noqa
+from app.src.domain.professor.model import Professor  # noqa
+from app.src.domain.course.model import Course  # noqa
+from app.src.domain.lecture.model import Lecture  # noqa
+from app.src.domain.department.model import Department  # noqa
+from app.src.domain.enrollment.model import Enrollment  # noqa
+from app.src.domain.student_semester_gpa.model import StudentSemesterGPA  # noqa
 
 target_metadata = Base.metadata
 
