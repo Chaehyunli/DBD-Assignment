@@ -60,15 +60,15 @@ def upgrade() -> None:
     op.execute("""
         INSERT INTO enrollment (student_id, lecture_id, grade)
         VALUES
-        -- 박지훈 (S2001): 2과목 수강
-        ('S2001', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS101' AND semester = '2025-2' AND professor_id = 'P4001'), 'A+'),
-        ('S2001', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS102' AND semester = '2025-2' AND professor_id = 'P4002'), 'A0'),
-        -- 이서연 (S2002): 2과목 수강
-        ('S2002', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS101' AND semester = '2025-2' AND professor_id = 'P4001'), 'B+'),
-        ('S2002', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS201' AND semester = '2025-2' AND professor_id = 'P4001'), 'A0'),
-        -- 정예슬 (S3001): 2과목 수강
-        ('S3001', (SELECT lecture_id FROM lecture WHERE course_code = 'DES101' AND semester = '2025-2' AND professor_id = 'P5001'), 'A0'),
-        ('S3001', (SELECT lecture_id FROM lecture WHERE course_code = 'DES102' AND semester = '2025-2' AND professor_id = 'P5001'), 'A+')
+        -- 박지훈 (S1000011): 2과목 수강
+        ('S1000011', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS101' AND semester = '2025-2' AND professor_id = 'P4001'), 'A+'),
+        ('S1000011', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS102' AND semester = '2025-2' AND professor_id = 'P4002'), 'A0'),
+        -- 이서연 (S1000012): 2과목 수강
+        ('S1000012', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS101' AND semester = '2025-2' AND professor_id = 'P4001'), 'B+'),
+        ('S1000012', (SELECT lecture_id FROM lecture WHERE course_code = 'BUS201' AND semester = '2025-2' AND professor_id = 'P4001'), 'A0'),
+        -- 정예슬 (S1000013): 2과목 수강
+        ('S1000013', (SELECT lecture_id FROM lecture WHERE course_code = 'DES101' AND semester = '2025-2' AND professor_id = 'P5001'), 'A0'),
+        ('S1000013', (SELECT lecture_id FROM lecture WHERE course_code = 'DES102' AND semester = '2025-2' AND professor_id = 'P5001'), 'A+')
     """)
 
 

@@ -47,9 +47,9 @@ def upgrade() -> None:
     op.execute("""
         INSERT INTO student_semester_gpa (student_id, semester, semester_gpa, earned_credits)
         VALUES
-        ('S2001', '2025-2', 4.25, 6),
-        ('S2002', '2025-2', 3.75, 6),
-        ('S3001', '2025-2', 4.20, 5)
+        ('S1000011', '2025-2', 4.25, 6),
+        ('S1000012', '2025-2', 3.75, 6),
+        ('S1000013', '2025-2', 4.20, 5)
     """)
 
 

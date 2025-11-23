@@ -37,9 +37,9 @@ def upgrade() -> None:
     op.execute("""
         INSERT INTO student (student_id, student_name, grade_year, enrollment_status, overall_gpa, dept_code)
         VALUES
-        ('S2001', '박지훈', 1, '재학', 4.25, 'BUS'),
-        ('S2002', '이서연', 2, '재학', 3.75, 'BUS'),
-        ('S3001', '정예슬', 1, '재학', 4.20, 'DES')
+        ('S1000011', '박지훈', 1, '재학', 4.25, 'BUS'),
+        ('S1000012', '이서연', 2, '재학', 3.75, 'BUS'),
+        ('S1000013', '정예슬', 1, '재학', 4.20, 'DES')
     """)
 
 
